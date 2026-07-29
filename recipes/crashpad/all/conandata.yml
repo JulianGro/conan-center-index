@@ -16,9 +16,7 @@ sources:
 patches:
   "cci.20260722":
     #- patch_file: "patches/cci.20220219-0001-fix-openssl-link-order.patch"
-
     #- patch_file: "patches/cci.20220219-0005-allow-all-archs.patch"
-    #- patch_file: "patches/cci.20220219-0006-mini_chromium-win_helper-py3.patch"
     # reused from cci.20220219
     - patch_file: "patches/cci.20260722-0002-remove-fPIC-Werror-LTO.patch"
     - patch_file: "patches/cci.20260722-0003-compilers-from-env.patch"
