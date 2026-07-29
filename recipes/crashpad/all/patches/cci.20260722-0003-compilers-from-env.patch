@@ -1,0 +1,13 @@
+--- third_party/mini_chromium/mini_chromium/build/config/BUILD.gn
++++ third_party/mini_chromium/mini_chromium/build/config/BUILD.gn
+@@ -496,8 +496,8 @@     asm = cxx
+     ld = cxx
+     ar = ndk_bin_dir + "llvm-ar"
+   } else {
+-    cc = "clang"
+-    cxx = "clang++"
++    cc = getenv("CC")
++    cxx = getenv("CXX")
+     asm = cxx
+     ld = cxx
+ 

@@ -12,7 +12,7 @@ from conan.tools.gnu import AutotoolsDeps, AutotoolsToolchain
 import os
 import textwrap
 
-required_conan_version = ">=1.64.0"
+required_conan_version = ">=2.28"
 
 
 class CrashpadConan(ConanFile):
@@ -38,15 +38,6 @@ class CrashpadConan(ConanFile):
 
     def export_sources(self):
         export_conandata_patches(self)
-
-    def _minimum_compiler_cxx14(self):
-        return {
-            "apple-clang": 10,
-            "gcc": 5,
-            "clang": "3.9",
-            "msvc": "190",
-            "Visual Studio": 14,
-        }.get(str(self.settings.compiler))
 
     def config_options(self):
         if self.settings.os == "Windows":
@@ -80,14 +71,8 @@ class CrashpadConan(ConanFile):
             if not self.dependencies["libcurl"].options.shared:
                 # FIXME: is this true?
                 self.output.warning("crashpad needs a shared libcurl library")
-        min_compiler_version = self._minimum_compiler_cxx14()
-        if min_compiler_version:
-            if Version(self.settings.compiler.version) < min_compiler_version:
-                raise ConanInvalidConfiguration("crashpad needs a c++14 capable compiler, version >= {}".format(min_compiler_version))
-        else:
-            self.output.warning("This recipe does not know about the current compiler and assumes it has sufficient c++14 supports.")
-        if self.settings.compiler.cppstd:
-            check_min_cppstd(self, 14)
+        if self.settings.compiler.get_safe("cppstd"):
+            check_min_cppstd(self, 20)
 
     def source(self):
         get(self, **self.conan_data["sources"][self.version]["crashpad"], destination=self.source_folder, strip_root=True)
@@ -282,6 +267,3 @@ class CrashpadConan(ConanFile):
 
         self.cpp_info.components["handler"].libs = ["handler"]
         self.cpp_info.components["handler"].requires = ["client", "util", "handler_common", "minidump", "snapshot"] + extra_handler_req
-
-        bin_path = os.path.join(self.package_folder, "bin")
-        self.env_info.PATH.append(bin_path)

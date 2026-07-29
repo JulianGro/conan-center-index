@@ -1,0 +1,41 @@
+--- third_party/mini_chromium/mini_chromium/build/config/BUILD.gn
++++ third_party/mini_chromium/mini_chromium/build/config/BUILD.gn
+@@ -123,11 +123,11 @@ config("release") {
+     arflags = []
+     if (!mini_chromium_is_clang) {
+       cflags += [
+-        "/GL",  # LTCG.
++        # LTCG.
+         "/d2Zi+",  # Improve debugging of optimized code.
+       ]
+-      ldflags += [ "/LTCG" ]
+-      arflags += [ "/LTCG" ]
++      ldflags += [  ]
++      arflags += [  ]
+     }
+   }
+ }
+@@ -140,7 +140,6 @@ config("default") {
+   if (mini_chromium_is_posix || mini_chromium_is_fuchsia) {
+     cflags = [
+       "-Wall",
+-      "-Werror",
+       "-Wextra",
+       "-fno-exceptions",
+       "-fno-rtti",
+@@ -252,7 +251,6 @@ config("default") {
+       "/D_UNICODE",
+       "/FS",
+       "/W4",
+-      "/WX",
+       "/Zi",
+       "/bigobj",  # Support larger number of sections in obj file.
+       "/wd4996",  # 'X' was declared deprecated.
+@@ -380,7 +378,6 @@ config("default") {
+ 
+   if ((mini_chromium_is_posix && !mini_chromium_is_mac &&
+        !mini_chromium_is_ios) || mini_chromium_is_fuchsia) {
+-    cflags += [ "-fPIC" ]
+     ldflags += [
+       # This must follow Fuchsia’s fdio library above.
+       "-Wl,--as-needed",
