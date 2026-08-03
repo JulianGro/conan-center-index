@@ -157,6 +157,7 @@ class SentryNativeConan(ConanFile):
         tc.variables["SENTRY_BACKEND"] = self.options.backend
         if self.options.backend == "breakpad":
             tc.variables["SENTRY_BREAKPAD_SYSTEM"] = self.options.with_breakpad == "google"
+        tc.variables["SENTRY_LIBUNWIND_SYSTEM"] = True
         tc.variables["SENTRY_ENABLE_INSTALL"] = True
         tc.variables["SENTRY_TRANSPORT"] = self.options.transport
         tc.variables["SENTRY_PIC"] = self.options.get_safe("fPIC", True)
@@ -167,8 +168,6 @@ class SentryNativeConan(ConanFile):
             tc.variables["CRASHPAD_WER_ENABLED"] = True
         tc.generate()
         deps = CMakeDeps(self)
-        if self.settings.os == "Linux":
-            deps.set_property("libunwind", "cmake_target_name", "unwind")
         deps.generate()
 
     def build(self):
